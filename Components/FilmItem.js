@@ -1,12 +1,12 @@
 import React from 'react'
-import { StyleSheet, View, Text, Image } from 'react-native'
+import { StyleSheet, View, Text, Image, TouchableOpacity  } from 'react-native'
 import { getImageFromApi } from '../API/TMDBApi'
-
+import moment from 'moment'
 export default class FilmItem extends React.Component {
   render() {
-      const film = this.props.film
+    const { film, displayDetailForFilm } = this.props
     return (
-        <View style={styles.main_container}>
+        <TouchableOpacity onPress={() => displayDetailForFilm(film.id)} style={styles.main_container}>
             <Image
             style={styles.image}
             source={{uri: getImageFromApi(film.poster_path)}}
@@ -21,10 +21,10 @@ export default class FilmItem extends React.Component {
                     {/* La propriété numberOfLines permet de couper un texte si celui-ci est trop long, il suffit de définir un nombre maximum de ligne */}
                 </View>
                 <View style={styles.date_container}>
-                    <Text style={styles.date_text}>Sorti le {film.release_date}</Text>
+                    <Text style={styles.date_text}>Sorti le {moment(new Date(film.release_date)).format('DD/MM/YYYY')}</Text>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     )
   }
 }

@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, TextInput, Text,  Button, View, FlatList, ActivityIndicator  } from 'react-native';
 import FilmItem from './FilmItem'
@@ -55,6 +54,11 @@ export default class Search extends React.Component {
           }           
     }
 
+    _displayDetailForFilm = (idFilm) => {
+        this.props.navigation.navigate('FilmDetail', { idFilm: idFilm })
+      }
+    
+
     _displayExisting(){
         if (!this.state.isExisting) {
             return (
@@ -79,7 +83,7 @@ export default class Search extends React.Component {
   render () {
     return (
         <View style={styles.main}>
-            <Text style={styles.text}>The Movies App</Text>
+            {/* <Text style={styles.text}>The Movies App</Text> */}
           <View style={{padding: 7.5}}>
             <TextInput style={styles.input} 
             placeholder='Titre du film'
@@ -93,7 +97,7 @@ export default class Search extends React.Component {
           <FlatList
             data={this.state.films}
             keyExtractor={item => item.id.toString()}
-            renderItem={({item}) => <FilmItem film={item} />} 
+            renderItem={({item}) => <FilmItem film={item} displayDetailForFilm={this._displayDetailForFilm} />} 
             onEndReachedThreshold={0.5}
             onEndReached={() => {
                 if (this.page < this.totalPages) { // On vérifie qu'on n'a pas atteint la fin de la pagination (totalPages) avant de charger plus d'éléments
@@ -102,7 +106,6 @@ export default class Search extends React.Component {
             }}
           
           />
-          <StatusBar style="auto" />
           {this._displayExisting()}
           {this._displayLoading()}
         </View>
@@ -113,7 +116,6 @@ export default class Search extends React.Component {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    marginTop: 50,
     paddingHorizontal: 15,
     backgroundColor: '#111'
   },
