@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 15,
     backgroundColor: '#111'
+    //backgroundColor: Platform.OS === '#111' ? 'red' : '#222',
   },
   text: {
     fontSize: 20,

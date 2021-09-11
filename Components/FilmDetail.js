@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, TouchableOpacity, Button } from 'react-native'
+import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, TouchableOpacity, Platform, Share } from 'react-native'
 import { getFilmDetailFromApi, getImageFromApi } from '../API/TMDBApi'
 import { connect } from 'react-redux'
 import moment from 'moment'
@@ -45,6 +45,27 @@ class FilmDetail extends React.Component {
       )
     }
   }
+
+  _shareFilm() {
+    const { film } = this.state
+    Share.share({ title: film.title, message: film.overview })
+  }
+
+  _displayFloatingActionButton() {
+    const { film } = this.state
+    if (film != undefined) { 
+      return (
+        <TouchableOpacity
+          style={styles.share_touchable_floatingactionbutton}
+          onPress={() => this._shareFilm()}>
+          <Image
+            style={styles.share_image}
+            source={require('../Images/ic_share.android.png')} />
+        </TouchableOpacity>
+      )
+    }
+}
+
 
   _toggleFavorite() {
     const action = { type: "TOGGLE_FAVORITE", value: this.state.film }
@@ -110,6 +131,7 @@ class FilmDetail extends React.Component {
       <View style={styles.main_container}>
         {this._displayLoading()}
         {this._displayFilm()}
+        {this._displayFloatingActionButton()}
       </View>
     )
   }
@@ -175,6 +197,22 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     backgroundColor: '#fff'
+  },
+  share_touchable_floatingactionbutton: {
+    position: 'absolute',
+    width: 60,
+    height: 60,
+    right: 30,
+    bottom: 30,
+    borderRadius: 30,
+    //backgroundColor: '#E50914',
+    backgroundColor: Platform.OS === '#111' ? 'skyblue' : '#E50914',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  share_image: {
+    width: 30,
+    height: 30
   }
 })
 
