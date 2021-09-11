@@ -1,8 +1,25 @@
 import React from 'react'
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, Image, TouchableOpacity, Animated, Dimensions } from 'react-native'
 import { getImageFromApi } from '../API/TMDBApi'
 import moment from 'moment'
 export default class FilmItem extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      positionLeft: new Animated.Value(Dimensions.get('window').width)
+    }
+  }
+
+componentDidMount() {
+    Animated.spring(
+      this.state.positionLeft,
+      {
+        toValue: 0
+      }
+    ).start()
+  }
+
 
   _displayFavoriteImage() {
     if (this.props.isFilmFavorite) {
@@ -19,7 +36,8 @@ export default class FilmItem extends React.Component {
   render() {
     const { film, displayDetailForFilm } = this.props
     return (
-        <TouchableOpacity onPress={() => displayDetailForFilm(film.id)} style={styles.main_container}>
+      <Animated.View style={{ left: this.state.positionLeft }}> 
+          <TouchableOpacity onPress={() => displayDetailForFilm(film.id)} style={styles.main_container}>
             <Image
             style={styles.image}
             source={{uri: getImageFromApi(film.poster_path)}}
@@ -39,6 +57,7 @@ export default class FilmItem extends React.Component {
                 </View>
             </View>
         </TouchableOpacity>
+      </Animated.View>
     )
   }
 }
